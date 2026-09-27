@@ -218,20 +218,48 @@ ul { list-style: none; }
 .nav-mobile {
   position: fixed; inset: 0; z-index: 480;
   background: var(--bg);
-  display: grid; place-items: center;
+  overflow-y: auto;
   clip-path: inset(0 0 100% 0);
   transition: clip-path .6s var(--ease-soft);
 }
 .nav-mobile[data-open="true"] { clip-path: inset(0); }
 html.nav-open .nav-toggle { visibility: hidden; }
+.nav-mobile-scroll {
+  min-height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 7rem 1.5rem 3rem; gap: 3rem;
+}
 .nav-mobile-list { display: flex; flex-direction: column; align-items: center; gap: 1.6rem; }
 .nav-mobile-list a { font-family: var(--serif); font-style: italic; font-size: 2rem; color: var(--cream); }
 .nav-mobile-close {
-  position: absolute; top: 1.6rem; right: 1.4rem;
+  position: absolute; top: 1.6rem; right: 1.4rem; z-index: 1;
   width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-strong);
   display: grid; place-items: center;
 }
 .nav-mobile-close svg { width: 18px; height: 18px; }
+
+.nav-mobile-areas { width: 100%; max-width: 420px; }
+.nav-mobile-areas-title {
+  font-family: var(--sans); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--accent); font-weight: 600; text-align: center; margin-bottom: 1.2rem;
+}
+.nav-area-item { border-top: 1px solid var(--line); }
+.nav-area-item:last-child { border-bottom: 1px solid var(--line); }
+.nav-area-toggle {
+  width: 100%; display: flex; align-items: center; gap: .8rem;
+  padding: .9rem .2rem; text-align: left;
+}
+.nav-area-num { font-family: var(--sans); font-size: .72rem; color: var(--cream-3); }
+.nav-area-name { flex: 1; font-family: var(--serif); font-size: 1.05rem; color: var(--cream); }
+.nav-area-chevron { width: 18px; height: 18px; color: var(--cream-3); transition: transform .3s var(--ease-soft); flex: none; }
+.nav-area-item.is-open .nav-area-chevron { transform: rotate(180deg); color: var(--accent); }
+.nav-area-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s var(--ease-soft);
+}
+.nav-area-item.is-open .nav-area-body { max-height: 220px; }
+.nav-area-body p { color: var(--cream-3); font-size: .88rem; line-height: 1.55; padding-bottom: .9rem; }
+.nav-area-body p + p { padding-top: 0; }
 
 /* =============================================================
    7. Hero
@@ -298,19 +326,6 @@ html.nav-open .nav-toggle { visibility: hidden; }
   color: var(--cream-3); font-size: .85rem;
 }
 .hero-meta strong { color: var(--cream); font-weight: 600; }
-
-.hero-audio-cta {
-  display: inline-flex; align-items: center; gap: .6rem;
-  margin-top: 1.6rem; padding: .5rem .9rem .5rem .6rem;
-  border: 1px solid var(--line-strong); border-radius: 999px;
-  color: var(--cream-3); font-size: .82rem;
-  transition: border-color .3s, color .3s;
-}
-.hero-audio-cta:hover { border-color: var(--accent); color: var(--cream); }
-.hero-audio-cta .audio-icon { width: 16px; height: 16px; }
-.hero-audio-cta .icon-pause { display: none; }
-.hero-audio-cta.is-playing .icon-play { display: none; }
-.hero-audio-cta.is-playing .icon-pause { display: block; }
 
 .split-word, .split-char { display: inline-block; will-change: transform, opacity; }
 
@@ -464,39 +479,25 @@ html.nav-open .nav-toggle { visibility: hidden; }
 /* =============================================================
    9. Practice areas
    ============================================================= */
-.areas-grid { display: grid; gap: 1.2rem; grid-template-columns: 1fr; }
-@media (min-width: 720px) { .areas-grid { grid-template-columns: repeat(2, 1fr); } }
+.areas-list { border-top: 1px solid var(--line); }
+.area-ref {
+  display: flex; align-items: baseline; gap: 1rem;
+  padding: 1.3rem .2rem; border-bottom: 1px solid var(--line);
+  transition: padding-left .3s var(--ease-soft), border-color .3s;
+}
+.area-ref:hover { padding-left: .6rem; border-color: var(--line-strong); }
+.area-ref-num { font-family: var(--sans); font-size: .75rem; color: var(--cream-3); flex: none; }
+.area-ref-name { font-family: var(--serif); font-size: clamp(1.15rem, 2vw, 1.4rem); color: var(--cream); }
 
-.area-card {
-  --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
-  position: relative; isolation: isolate;
-  background: var(--bg-3); border: 1px solid var(--line);
-  border-radius: 18px; padding: 2rem;
-  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
-  transform-style: preserve-3d;
-  transition: transform .55s var(--ease-soft), border-color .4s, box-shadow .4s;
+.areas-more {
+  display: inline-flex; align-items: center; gap: .6rem;
+  margin-top: 2rem; padding: .7rem 1.2rem;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  color: var(--cream-2); font-size: .85rem;
+  transition: border-color .3s, color .3s;
 }
-.area-card::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
-  background: radial-gradient(240px circle at var(--mx) var(--my), var(--accent-soft), transparent 60%);
-  opacity: 0; transition: opacity .4s;
-}
-.area-card:hover {
-  transition-duration: .15s;
-  border-color: var(--line-strong);
-  box-shadow: 0 40px 80px -30px rgba(0,0,0,.6);
-}
-.area-card:hover::before { opacity: 1; }
-.area-card .kicker { color: var(--cream-3); }
-.area-card h3 {
-  font-size: 1.5rem; color: var(--cream); margin-top: .7rem; font-style: italic;
-  transform: translateZ(30px);
-}
-.area-card p { color: var(--cream-3); margin-top: .8rem; font-size: .95rem; transform: translateZ(30px); }
-.area-card .area-detail {
-  margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line);
-  color: var(--cream-3); font-size: .88rem; transform: translateZ(30px);
-}
+.areas-more:hover { border-color: var(--accent); color: var(--accent); }
+.areas-more svg { width: 16px; height: 16px; }
 
 /* =============================================================
    10. Team / about
@@ -601,36 +602,6 @@ html.nav-open .nav-toggle { visibility: hidden; }
 }
 .wa-float:hover { transform: translateY(-4px) scale(1.04); }
 .wa-float svg { width: 28px; height: 28px; }
-
-.audio-welcome {
-  position: fixed; left: 1.2rem; bottom: 1.2rem; z-index: 300;
-  width: 46px; height: 46px; border-radius: 50%;
-  display: grid; place-items: center; isolation: isolate;
-  background: rgba(16, 29, 53, .85); color: var(--accent);
-  border: 1px solid var(--line-strong);
-  backdrop-filter: blur(6px);
-  transition: transform .4s var(--ease-soft), border-color .3s, color .3s;
-}
-.audio-welcome:hover { transform: translateY(-3px); border-color: var(--accent); color: var(--cream); }
-.audio-ring {
-  position: absolute; inset: -1px; border-radius: 50%;
-  border: 1px solid var(--accent); opacity: 0;
-  animation: audioPulse 3.2s ease-out infinite;
-}
-@keyframes audioPulse {
-  0%   { transform: scale(1);   opacity: .55; }
-  70%  { transform: scale(1.55); opacity: 0; }
-  100% { transform: scale(1.55); opacity: 0; }
-}
-.audio-welcome.is-playing .audio-ring { animation-duration: 1.6s; }
-.audio-welcome.has-played:not(.is-playing) .audio-ring { animation: none; opacity: 0; }
-.audio-icon { width: 18px; height: 18px; position: relative; z-index: 1; }
-.audio-icon.icon-pause { display: none; }
-.audio-welcome.is-playing .audio-icon.icon-play { display: none; }
-.audio-welcome.is-playing .audio-icon.icon-pause { display: block; }
-@media (prefers-reduced-motion: reduce) {
-  .audio-ring { animation: none; opacity: 0; }
-}
 
 /* =============================================================
    15.5. Media collage + video institucional

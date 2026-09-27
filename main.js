@@ -69,16 +69,43 @@
   function mountAreas(force) {
     var target = $("[data-areas]");
     if (!target || (!force && target.children.length > 0) || !data.practiceAreas) return;
-    var revealClass = force ? " is-revealed" : "";
     target.innerHTML = data.practiceAreas.map(function (a) {
-      return '<article class="area-card' + revealClass + '" data-reveal>' +
-        '<span class="kicker">' + escHTML(a.kicker) + '</span>' +
-        '<h3>' + escHTML(tr(a, "name")) + '</h3>' +
-        '<p>' + escHTML(tr(a, "summary")) + '</p>' +
-        '<p class="area-detail">' + escHTML(tr(a, "detail")) + '</p>' +
-        '</article>';
+      return '<div class="area-ref">' +
+        '<span class="area-ref-num">' + escHTML(a.kicker) + '</span>' +
+        '<span class="area-ref-name">' + escHTML(tr(a, "name")) + '</span>' +
+        '</div>';
     }).join("");
-    if (force) safe(initTilt, "initTilt");
+  }
+
+  function renderNavAreas(force) {
+    var target = $("[data-nav-areas]");
+    if (!target || (!force && target.children.length > 0) || !data.practiceAreas) return;
+    target.innerHTML = data.practiceAreas.map(function (a) {
+      return '<div class="nav-area-item">' +
+        '<button type="button" class="nav-area-toggle" data-nav-area-toggle aria-expanded="false">' +
+          '<span class="nav-area-num">' + escHTML(a.kicker) + '</span>' +
+          '<span class="nav-area-name">' + escHTML(tr(a, "name")) + '</span>' +
+          '<svg class="nav-area-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>' +
+        '</button>' +
+        '<div class="nav-area-body">' +
+          '<p>' + escHTML(tr(a, "summary")) + '</p>' +
+          '<p class="nav-area-detail">' + escHTML(tr(a, "detail")) + '</p>' +
+        '</div>' +
+        '</div>';
+    }).join("");
+  }
+
+  function initNavAreasAccordion() {
+    var root = $("[data-nav-areas]");
+    if (!root) return;
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-nav-area-toggle]");
+      if (!btn) return;
+      var item = btn.closest(".nav-area-item");
+      var isOpen = item.classList.contains("is-open");
+      item.classList.toggle("is-open", !isOpen);
+      btn.setAttribute("aria-expanded", (!isOpen).toString());
+    });
   }
 
   function mountTeam(force) {
@@ -205,6 +232,7 @@
     var toggle = $("[data-nav-toggle]");
     var close = $("[data-nav-close]");
     var mobile = $("[data-nav-mobile]");
+    var moreBtn = $("[data-areas-more]");
     var openMobile = function () {
       mobile.setAttribute("data-open", "true");
       document.documentElement.classList.add("nav-open");
@@ -214,6 +242,7 @@
       document.documentElement.classList.remove("nav-open");
     };
     if (toggle && mobile) toggle.addEventListener("click", openMobile);
+    if (moreBtn && mobile) moreBtn.addEventListener("click", openMobile);
     if (close && mobile) close.addEventListener("click", closeMobile);
     if (mobile) {
       $$("a", mobile).forEach(function (a) { a.addEventListener("click", closeMobile); });
@@ -257,29 +286,6 @@
     }, 6000);
   }
 
-  function initTilt() {
-    if (!fineHover) return;
-    $$(".area-card").forEach(function (card) {
-      var MAX = 6, tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
-      card.addEventListener("mousemove", function (e) {
-        var r = card.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        tx = -py * MAX; ty = px * MAX;
-        card.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
-        card.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
-        if (!raf) raf = requestAnimationFrame(loop);
-      });
-      card.addEventListener("mouseleave", function () { tx = 0; ty = 0; if (!raf) raf = requestAnimationFrame(loop); });
-      function loop() {
-        cx += (tx - cx) * 0.15; cy += (ty - cy) * 0.15;
-        card.style.setProperty("--rx", cx.toFixed(2) + "deg");
-        card.style.setProperty("--ry", cy.toFixed(2) + "deg");
-        raf = (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05) ? requestAnimationFrame(loop) : null;
-      }
-    });
-  }
-
   function splitWords(el) {
     el.setAttribute("aria-label", el.textContent.trim().replace(/\s+/g, " "));
     var wrap = function (text) {
@@ -320,32 +326,6 @@
         scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
       });
     }
-  }
-
-  function initAudioWelcome() {
-    var btns = $$("[data-audio-toggle]");
-    var audio = $("[data-audio-el]");
-    if (!btns.length || !audio) return;
-
-    btns.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        if (audio.paused) {
-          audio.play().catch(function () {});
-        } else {
-          audio.pause();
-        }
-      });
-    });
-    var syncState = function (playing) {
-      btns.forEach(function (btn) {
-        btn.classList.toggle("is-playing", playing);
-        if (playing) btn.classList.add("has-played");
-        btn.setAttribute("aria-pressed", playing ? "true" : "false");
-      });
-    };
-    audio.addEventListener("play", function () { syncState(true); });
-    audio.addEventListener("pause", function () { syncState(false); });
-    audio.addEventListener("ended", function () { syncState(false); });
   }
 
   /* ---------- Wizard de consulta (2 pasos) ---------- */
@@ -545,6 +525,7 @@
     safe(updateMapTitle, "updateMapTitle");
     safe(renderWizardAreas, "renderWizardAreas:lang");
     safe(function () { if (wizardState.areaId) renderWizardStep2(); }, "renderWizardStep2:lang");
+    safe(function () { renderNavAreas(true); }, "renderNavAreas:lang");
     updateLangSwitchUI();
   }
 
@@ -582,6 +563,7 @@
     safe(updateLangSwitchUI, "updateLangSwitchUI");
 
     safe(mountAreas, "mountAreas");
+    safe(renderNavAreas, "renderNavAreas");
     safe(mountTeam, "mountTeam");
     safe(mountProcess, "mountProcess");
     safe(mountContact, "mountContact");
@@ -594,13 +576,12 @@
 
     safe(initSplash, "initSplash");
     safe(initNav, "initNav");
+    safe(initNavAreasAccordion, "initNavAreasAccordion");
     safe(initSmoothAnchors, "initSmoothAnchors");
     safe(initReveals, "initReveals");
-    safe(initTilt, "initTilt");
     safe(initMeshFollow, "initMeshFollow");
     safe(initWizard, "initWizard");
     safe(initConsultaForm, "initConsultaForm");
-    safe(initAudioWelcome, "initAudioWelcome");
     safe(initLangSwitch, "initLangSwitch");
 
     if (window.gsap) {
