@@ -38,6 +38,10 @@
   ExpiresByType font/woff "access plus 1 year"
   ExpiresByType application/font-woff2 "access plus 1 year"
   ExpiresByType application/font-woff "access plus 1 year"
+
+  # Audio / video — cache long (rename the file if you replace it)
+  ExpiresByType audio/mp4 "access plus 1 month"
+  ExpiresByType video/mp4 "access plus 1 month"
 </IfModule>
 
 # ----- Cache-Control headers -----
@@ -52,8 +56,8 @@
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 
-  # Images & fonts: long cache
-  <FilesMatch "\.(webp|jpg|jpeg|png|svg|avif|ico|woff|woff2)$">
+  # Images, fonts & media: long cache
+  <FilesMatch "\.(webp|jpg|jpeg|png|svg|avif|ico|woff|woff2|mp4|mp3)$">
     Header set Cache-Control "public, max-age=2592000"
   </FilesMatch>
 

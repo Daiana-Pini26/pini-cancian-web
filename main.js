@@ -139,6 +139,43 @@
     }).join("");
   }
 
+  function mountCollageGrid(force) {
+    var target = $("[data-collage-grid]");
+    if (!target || (!force && target.children.length > 0)) return;
+    var media = data.mediaCollage || {};
+    var images = media.images || [];
+    var html = '<div class="collage-video" data-collage-video>' +
+      '<div class="collage-video-play" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
+      '</div>' +
+      '<p class="collage-video-label" data-i18n="media_video_label">' + escHTML(t("media_video_label")) + '</p>' +
+      '</div>';
+    html += images.map(function (img) {
+      return '<div class="collage-photo">' +
+        '<img src="' + escHTML(img.photo) + '" alt="' + escHTML(tr(img, "alt") || "") + '" loading="lazy" decoding="async" onerror="this.closest(\'.collage-photo\').style.display=\'none\'" />' +
+        '</div>';
+    }).join("");
+    target.innerHTML = html;
+  }
+
+  function mountInstagram(force) {
+    var target = $("[data-instagram-grid]");
+    if (target && (force || target.children.length === 0)) {
+      var tiles = "";
+      for (var i = 0; i < 6; i++) {
+        tiles += '<div class="instagram-tile" aria-hidden="true">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>' +
+          '</div>';
+      }
+      target.innerHTML = tiles;
+    }
+    var ig = data.instagram || {};
+    var link = $("[data-instagram-link]");
+    var handle = $("[data-instagram-handle]");
+    if (link && ig.url) link.setAttribute("href", ig.url);
+    if (handle && ig.handle) handle.textContent = ig.handle;
+  }
+
   function mountFooterYear() {
     var el = $("[data-year]");
     if (el) el.textContent = (data.year || new Date().getFullYear());
@@ -286,28 +323,168 @@
   }
 
   function initAudioWelcome() {
-    var btn = $("[data-audio-toggle]");
+    var btns = $$("[data-audio-toggle]");
     var audio = $("[data-audio-el]");
-    if (!btn || !audio) return;
+    if (!btns.length || !audio) return;
 
-    btn.addEventListener("click", function () {
-      if (audio.paused) {
-        audio.play().catch(function () {});
-      } else {
-        audio.pause();
+    btns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (audio.paused) {
+          audio.play().catch(function () {});
+        } else {
+          audio.pause();
+        }
+      });
+    });
+    var syncState = function (playing) {
+      btns.forEach(function (btn) {
+        btn.classList.toggle("is-playing", playing);
+        if (playing) btn.classList.add("has-played");
+        btn.setAttribute("aria-pressed", playing ? "true" : "false");
+      });
+    };
+    audio.addEventListener("play", function () { syncState(true); });
+    audio.addEventListener("pause", function () { syncState(false); });
+    audio.addEventListener("ended", function () { syncState(false); });
+  }
+
+  /* ---------- Wizard de consulta (2 pasos) ---------- */
+
+  var wizardState = { areaId: null, selections: {} };
+
+  function getWizardArea(id) {
+    var areas = (data.wizard && data.wizard.areas) || [];
+    for (var i = 0; i < areas.length; i++) { if (areas[i].id === id) return areas[i]; }
+    return null;
+  }
+
+  function wizardGroupOptions(group) {
+    if (group.dependsOn) return (group.optionsFor && group.optionsFor[wizardState.selections[group.dependsOn]]) || [];
+    return group.options || [];
+  }
+
+  function wizardGroupVisible(area, index) {
+    if (index === 0) return true;
+    var group = area.groups[index];
+    if (group.dependsOn) return wizardState.selections[group.dependsOn] != null;
+    var prev = area.groups[index - 1];
+    return wizardState.selections[prev.id] != null;
+  }
+
+  function buildWizardMessage(area) {
+    if (!area) return "";
+    var lines = [t("wizard_msg_intro").replace("{area}", tr(area, "label"))];
+    (area.groups || []).forEach(function (group) {
+      var selId = wizardState.selections[group.id];
+      if (selId == null) return;
+      var opts = wizardGroupOptions(group);
+      var opt = null;
+      for (var i = 0; i < opts.length; i++) { if (opts[i].id === selId) { opt = opts[i]; break; } }
+      if (opt) lines.push(tr(group, "question") + ": " + tr(opt, "label"));
+    });
+    if (area.id === "notificacion" && wizardState.selections.tipo != null) {
+      lines.push(t("wizard_msg_attach_note"));
+    }
+    lines.push("");
+    lines.push(t("wizard_msg_closing"));
+    return lines.join("\n");
+  }
+
+  function renderWizardAreas() {
+    var target = $("[data-wizard-areas]");
+    if (!target || !data.wizard) return;
+    target.innerHTML = data.wizard.areas.map(function (area) {
+      return '<button type="button" class="wizard-area-card" data-wizard-area="' + escHTML(area.id) + '">' +
+        '<span class="wizard-area-icon" aria-hidden="true">' + escHTML(area.icon) + '</span>' +
+        '<h3>' + escHTML(tr(area, "label")) + '</h3>' +
+        '<p>' + escHTML(tr(area, "desc")) + '</p>' +
+        '</button>';
+    }).join("");
+  }
+
+  function renderWizardStep2() {
+    var area = getWizardArea(wizardState.areaId);
+    if (!area) return;
+
+    var heading = $("[data-wizard-area-heading]");
+    if (heading) {
+      heading.innerHTML = '<span class="wizard-area-icon" aria-hidden="true">' + escHTML(area.icon) + '</span>' +
+        '<h3>' + escHTML(tr(area, "label")) + '</h3>';
+    }
+
+    var groupsEl = $("[data-wizard-groups]");
+    if (groupsEl) {
+      groupsEl.innerHTML = area.groups.map(function (group, i) {
+        if (!wizardGroupVisible(area, i)) return "";
+        var opts = wizardGroupOptions(group);
+        var selId = wizardState.selections[group.id];
+        var optsHtml = opts.map(function (o) {
+          var sel = (o.id === selId) ? " is-selected" : "";
+          return '<button type="button" class="wizard-option' + sel + '" data-wizard-option data-group="' + escHTML(group.id) + '" data-option="' + escHTML(o.id) + '" aria-pressed="' + (o.id === selId ? "true" : "false") + '">' +
+            escHTML(tr(o, "label")) + '</button>';
+        }).join("");
+        return '<div class="wizard-group">' +
+          '<p class="wizard-group-question">' + escHTML(tr(group, "question")) + '</p>' +
+          '<div class="wizard-options">' + optsHtml + '</div>' +
+          '</div>';
+      }).join("");
+    }
+
+    updateWizardPreview(area);
+  }
+
+  function updateWizardPreview(area) {
+    area = area || getWizardArea(wizardState.areaId);
+    var previewText = $("[data-wizard-preview-text]");
+    var sendBtn = $("[data-wizard-send]");
+    if (!area || !previewText || !sendBtn) return;
+    var msg = buildWizardMessage(area);
+    previewText.textContent = msg;
+    var complete = (area.groups || []).every(function (g) { return wizardState.selections[g.id] != null; });
+    sendBtn.setAttribute("href", waLink(msg));
+    sendBtn.classList.toggle("is-disabled", !complete);
+    if (complete) sendBtn.removeAttribute("tabindex");
+    else sendBtn.setAttribute("tabindex", "-1");
+  }
+
+  function showWizardStep(n) {
+    $$("[data-wizard-step]").forEach(function (el) {
+      el.hidden = (el.getAttribute("data-wizard-step") !== String(n));
+    });
+    if (n === 2) {
+      var root = $("[data-wizard]");
+      if (root) {
+        root.scrollIntoView({
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+          block: "start"
+        });
       }
-    });
-    audio.addEventListener("play", function () {
-      btn.classList.add("is-playing", "has-played");
-      btn.setAttribute("aria-pressed", "true");
-    });
-    audio.addEventListener("pause", function () {
-      btn.classList.remove("is-playing");
-      btn.setAttribute("aria-pressed", "false");
-    });
-    audio.addEventListener("ended", function () {
-      btn.classList.remove("is-playing");
-      btn.setAttribute("aria-pressed", "false");
+    }
+  }
+
+  function initWizard() {
+    var root = $("[data-wizard]");
+    if (!root || !data.wizard) return;
+    renderWizardAreas();
+
+    root.addEventListener("click", function (e) {
+      var areaCard = e.target.closest("[data-wizard-area]");
+      if (areaCard) {
+        wizardState = { areaId: areaCard.getAttribute("data-wizard-area"), selections: {} };
+        renderWizardStep2();
+        showWizardStep(2);
+        return;
+      }
+      var optBtn = e.target.closest("[data-wizard-option]");
+      if (optBtn) {
+        wizardState.selections[optBtn.getAttribute("data-group")] = optBtn.getAttribute("data-option");
+        renderWizardStep2();
+        return;
+      }
+      if (e.target.closest("[data-wizard-back]")) {
+        showWizardStep(1);
+        return;
+      }
     });
   }
 
@@ -362,8 +539,12 @@
     safe(function () { mountProcess(true); }, "mountProcess:lang");
     safe(function () { mountContact(true); }, "mountContact:lang");
     safe(function () { mountOfficeGallery(true); }, "mountOfficeGallery:lang");
+    safe(function () { mountCollageGrid(true); }, "mountCollageGrid:lang");
+    safe(function () { mountInstagram(true); }, "mountInstagram:lang");
     safe(function () { mountWhatsappLinks(true); }, "mountWhatsappLinks:lang");
     safe(updateMapTitle, "updateMapTitle");
+    safe(renderWizardAreas, "renderWizardAreas:lang");
+    safe(function () { if (wizardState.areaId) renderWizardStep2(); }, "renderWizardStep2:lang");
     updateLangSwitchUI();
   }
 
@@ -406,6 +587,8 @@
     safe(mountContact, "mountContact");
     safe(mountMap, "mountMap");
     safe(mountOfficeGallery, "mountOfficeGallery");
+    safe(mountCollageGrid, "mountCollageGrid");
+    safe(mountInstagram, "mountInstagram");
     safe(mountFooterYear, "mountFooterYear");
     safe(mountWhatsappLinks, "mountWhatsappLinks");
 
@@ -415,6 +598,7 @@
     safe(initReveals, "initReveals");
     safe(initTilt, "initTilt");
     safe(initMeshFollow, "initMeshFollow");
+    safe(initWizard, "initWizard");
     safe(initConsultaForm, "initConsultaForm");
     safe(initAudioWelcome, "initAudioWelcome");
     safe(initLangSwitch, "initLangSwitch");
