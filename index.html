@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pini & Cancian — Estudio Jurídico en Goya, Corrientes</title>
+  <meta name="description" content="Estudio Jurídico Pini & Cancian en Goya, Corrientes. Derecho Laboral, Derecho de Familia, Sucesiones y Derecho Civil, con asesoramiento claro y cercano.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d0c0a'/%3E%3Ctext x='50' y='68' font-size='58' fill='%23c9a961' text-anchor='middle' font-family='Georgia,serif' font-style='italic'%3EP%26C%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap">
+
+  <link rel="preload" as="image" href="assets/img/hero.jpg" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=20260926">
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip_link">Saltar al contenido</a>
+
+  <div class="splash" data-splash aria-hidden="true">
+    <span class="splash-mark">Pini <em>&amp;</em> Cancian</span>
+  </div>
+
+  <a class="wa-float" data-wa-link href="#" aria-label="Escribir por WhatsApp" data-i18n-aria="wa_float_aria">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.6.6-1.7 1.1-2.6.8-1.7-.5-3.6-1.7-5.1-3.2S7.2 9 6.7 7.3c-.3-.9.2-2 .8-2.6l.6-.6c.4-.4 1.1-.4 1.5.1L11.2 6c.3.4.3 1-.1 1.4l-.5.5c.5 1 1.3 1.9 2.2 2.6l.5-.5c.4-.4 1-.4 1.4-.1l1.8 1.4c.5.4.5 1.1.1 1.5l-.6.6zM12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.4A10 10 0 1 0 12 2z"/></svg>
+  </a>
+
+  <button type="button" class="audio-welcome" data-audio-toggle aria-label="Escuchar mensaje de bienvenida" data-i18n-aria="audio_welcome_aria" title="Escuchar mensaje de bienvenida" data-i18n-title="audio_welcome_aria" aria-pressed="false">
+    <span class="audio-ring" aria-hidden="true"></span>
+    <svg class="audio-icon icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M11 5 6 9H3v6h3l5 4V5z"/>
+      <path d="M15.3 8.5a5 5 0 0 1 0 7"/>
+      <path d="M17.8 6a8.2 8.2 0 0 1 0 12"/>
+    </svg>
+    <svg class="audio-icon icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <rect x="5" y="5" width="4.5" height="14" rx="1"/>
+      <rect x="14.5" y="5" width="4.5" height="14" rx="1"/>
+    </svg>
+  </button>
+  <audio data-audio-el preload="none">
+    <source src="assets/audio/bienvenida.mp4" type="audio/mp4">
+  </audio>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#main" class="brand-mark">Pini <span>&amp;</span> Cancian</a>
+      <nav class="nav-links" aria-label="Navegación principal" data-i18n-aria="nav_aria">
+        <a class="nav-link" href="#consulta" data-i18n="nav_consulta">Consulta gratuita</a>
+        <a class="nav-link" href="#areas" data-i18n="nav_areas">Áreas</a>
+        <a class="nav-link" href="#nosotros" data-i18n="nav_nosotros">Sobre nosotros</a>
+        <a class="nav-link" href="#contacto" data-i18n="nav_contacto">Contacto</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="lang-switch" data-lang-switch role="group" aria-label="Idioma" data-i18n-aria="lang_switch_aria">
+          <button type="button" class="lang-btn" data-lang="es">ES</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="pt">PT</button>
+          <button type="button" class="lang-btn" data-lang="zh">中文</button>
+        </div>
+        <a class="btn btn-primary btn-sm" data-wa-link href="#">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.6.6-1.7 1.1-2.6.8-1.7-.5-3.6-1.7-5.1-3.2S7.2 9 6.7 7.3c-.3-.9.2-2 .8-2.6l.6-.6c.4-.4 1.1-.4 1.5.1L11.2 6c.3.4.3 1-.1 1.4l-.5.5c.5 1 1.3 1.9 2.2 2.6l.5-.5c.4-.4 1-.4 1.4-.1l1.8 1.4c.5.4.5 1.1.1 1.5l-.6.6zM12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.4A10 10 0 1 0 12 2z"/></svg>
+          <span data-i18n="nav_whatsapp">WhatsApp</span>
+        </a>
+        <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú" aria-controls="nav-mobile" data-i18n-aria="nav_toggle_aria">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-mobile" id="nav-mobile" data-nav-mobile data-open="false">
+    <button class="nav-mobile-close" data-nav-close aria-label="Cerrar menú" data-i18n-aria="nav_close_aria">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <ul class="nav-mobile-list">
+      <li><a href="#consulta" data-i18n="nav_consulta">Consulta gratuita</a></li>
+      <li><a href="#areas" data-i18n="nav_areas">Áreas</a></li>
+      <li><a href="#nosotros" data-i18n="nav_nosotros">Sobre nosotros</a></li>
+      <li><a href="#contacto" data-i18n="nav_contacto">Contacto</a></li>
+    </ul>
+  </div>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <img class="ambient-on" src="assets/img/hero.jpg" alt="" fetchpriority="high" loading="eager" decoding="sync" onerror="this.style.opacity=0">
+      </div>
+      <div class="hero-mesh" aria-hidden="true"></div>
+      <div class="hero-grain" aria-hidden="true"></div>
+
+      <div class="container">
+        <div class="hero-content">
+          <p class="kicker eyebrow"><span class="dot"></span><span data-i18n="hero_kicker">Estudio Jurídico · Goya, Corrientes</span></p>
+          <h1 class="hero-title" data-split="words" data-i18n="hero_title">Defendemos lo que a vos te importa.</h1>
+          <p class="hero-sub" data-i18n="hero_sub">Derecho Laboral, Familia, Sucesiones y Civil, con una estrategia clara desde la primera consulta y acompañamiento real hasta el final del proceso.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" data-wa-link href="#">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.6.6-1.7 1.1-2.6.8-1.7-.5-3.6-1.7-5.1-3.2S7.2 9 6.7 7.3c-.3-.9.2-2 .8-2.6l.6-.6c.4-.4 1.1-.4 1.5.1L11.2 6c.3.4.3 1-.1 1.4l-.5.5c.5 1 1.3 1.9 2.2 2.6l.5-.5c.4-.4 1-.4 1.4-.1l1.8 1.4c.5.4.5 1.1.1 1.5l-.6.6zM12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.4A10 10 0 1 0 12 2z"/></svg>
+              <span data-i18n="btn_whatsapp">Escribinos por WhatsApp</span>
+            </a>
+            <a class="btn btn-ghost" href="#areas" data-i18n="btn_ver_areas">Ver áreas de práctica</a>
+          </div>
+          <div class="hero-meta">
+            <span><strong>Goya</strong>, Corrientes</span>
+            <span data-i18n="hero_meta_attention">Atención presencial y a distancia</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section consulta" id="consulta">
+      <div class="container">
+        <div class="consulta-card" data-reveal>
+          <div class="consulta-head">
+            <span class="kicker" data-i18n="consulta_kicker">Consulta gratuita</span>
+            <h2 data-i18n="consulta_title">Contanos tu caso, sin compromiso.</h2>
+            <p data-i18n="consulta_sub">Dejanos tus datos y te escribimos por WhatsApp a la brevedad para conversar tu situación.</p>
+          </div>
+          <form class="consulta-form" data-consulta-form novalidate>
+            <div class="field-row">
+              <div class="field">
+                <input type="text" id="c-nombre" name="nombre" placeholder=" " autocomplete="given-name" required>
+                <label for="c-nombre" data-i18n="field_nombre">Nombre</label>
+              </div>
+              <div class="field">
+                <input type="text" id="c-apellido" name="apellido" placeholder=" " autocomplete="family-name" required>
+                <label for="c-apellido" data-i18n="field_apellido">Apellido</label>
+              </div>
+            </div>
+            <div class="field">
+              <input type="tel" id="c-telefono" name="telefono" placeholder=" " autocomplete="tel" required>
+              <label for="c-telefono" data-i18n="field_telefono">Teléfono / WhatsApp</label>
+            </div>
+            <button type="submit" class="btn btn-primary consulta-submit">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.6.6-1.7 1.1-2.6.8-1.7-.5-3.6-1.7-5.1-3.2S7.2 9 6.7 7.3c-.3-.9.2-2 .8-2.6l.6-.6c.4-.4 1.1-.4 1.5.1L11.2 6c.3.4.3 1-.1 1.4l-.5.5c.5 1 1.3 1.9 2.2 2.6l.5-.5c.4-.4 1-.4 1.4-.1l1.8 1.4c.5.4.5 1.1.1 1.5l-.6.6zM12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.4A10 10 0 1 0 12 2z"/></svg>
+              <span data-i18n="btn_consulta_submit">Realizar consulta gratuita</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto section">
+      <div class="container manifesto-grid">
+        <div class="manifesto-num" data-reveal>“</div>
+        <div class="manifesto-text">
+          <p data-reveal data-i18n="manifesto_p1">Creemos que un buen asesoramiento legal empieza por escuchar. Cada caso tiene una historia antes de tener un expediente.</p>
+          <p data-reveal data-i18n="manifesto_p2">Por eso en Pini &amp; Cancian combinamos dos miradas complementarias —laboral y de familia, civil y sucesiones— bajo un mismo criterio: claridad en cada paso y honestidad sobre lo que es realmente posible.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="areas">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="kicker" data-i18n="areas_kicker">Áreas de práctica</span>
+          <h2 data-i18n="areas_title">En qué te podemos ayudar.</h2>
+          <p data-i18n="areas_sub">Cuatro áreas, un mismo criterio: estrategia clara y acompañamiento real en cada etapa.</p>
+        </div>
+        <div class="areas-grid" data-areas></div>
+      </div>
+    </section>
+
+    <section class="section" id="nosotros">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="kicker" data-i18n="nosotros_kicker">Sobre nosotros</span>
+          <h2 data-i18n="nosotros_title">El equipo detrás de cada caso.</h2>
+          <p data-i18n="nosotros_sub">Dos socios y dos asociados, con especialidades que se complementan para cubrir cada etapa de tu proceso legal.</p>
+        </div>
+        <div class="about-grid" data-team></div>
+      </div>
+    </section>
+
+    <section class="process section" id="proceso">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="kicker" data-i18n="proceso_kicker">Cómo trabajamos</span>
+          <h2 data-i18n="proceso_title">Un proceso sin sorpresas.</h2>
+        </div>
+        <div class="process-grid" data-process></div>
+      </div>
+    </section>
+
+    <section class="section final-cta">
+      <div class="container">
+        <p class="kicker" data-reveal data-i18n="finalcta_kicker">¿Tenés una consulta?</p>
+        <h2 data-reveal data-i18n="finalcta_title">Conversemos tu caso, sin vueltas.</h2>
+        <p data-reveal data-i18n="finalcta_sub">Contanos tu situación por WhatsApp y te decimos, con honestidad, cómo te podemos ayudar.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" data-wa-link href="#" data-reveal>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.6.6-1.7 1.1-2.6.8-1.7-.5-3.6-1.7-5.1-3.2S7.2 9 6.7 7.3c-.3-.9.2-2 .8-2.6l.6-.6c.4-.4 1.1-.4 1.5.1L11.2 6c.3.4.3 1-.1 1.4l-.5.5c.5 1 1.3 1.9 2.2 2.6l.5-.5c.4-.4 1-.4 1.4-.1l1.8 1.4c.5.4.5 1.1.1 1.5l-.6.6zM12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.4A10 10 0 1 0 12 2z"/></svg>
+            <span data-i18n="btn_whatsapp">Escribinos por WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact section" id="contacto">
+      <div class="container contact-grid">
+        <div>
+          <div class="section-head" data-reveal style="margin-bottom: 0;">
+            <span class="kicker" data-i18n="contacto_kicker">Contacto</span>
+            <h2 data-i18n="contacto_title">Estamos en Goya.</h2>
+            <p data-i18n="contacto_sub">¿Preferís pasar a charlar en persona? Te esperamos en José Gómez 1468, Goya, Corrientes.</p>
+          </div>
+        </div>
+        <div>
+          <p class="kicker map-label" data-i18n="map_label">Mirá cómo llegar</p>
+          <div class="map-frame" data-map data-reveal></div>
+          <p class="kicker gallery-label" data-i18n="gallery_label">Así es nuestro estudio</p>
+          <div class="office-gallery" data-office-gallery data-reveal></div>
+          <div class="contact-list" data-contact-list data-reveal></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-brand">Pini <em>&amp;</em> Cancian</span>
+      <span class="footer-meta">© <span data-year></span> <span data-i18n="footer_meta">Pini &amp; Cancian Estudio Jurídico · Goya, Corrientes</span></span>
+    </div>
+  </footer>
+
+  <script defer src="lib/gsap.min.js"></script>
+  <script defer src="lib/ScrollTrigger.min.js"></script>
+  <script defer src="lib/manifest.js?v=20260926"></script>
+  <script defer src="lib/i18n.js?v=20260926"></script>
+  <script defer src="main.js?v=20260926"></script>
+</body>
+</html>

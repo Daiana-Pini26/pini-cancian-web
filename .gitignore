@@ -1,0 +1,15 @@
+# Configuración local de Claude Code (solo para desarrollo, no hace falta publicarla)
+.claude/
+
+# Servidor local usado únicamente para previsualizar el sitio en desarrollo
+tools/
+
+# Fotos originales sin procesar (quedan en tu compu, no hace falta subirlas)
+assets/photos/source/
+
+# Librería descargada pero no utilizada en el sitio final
+lib/lenis.min.js
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
