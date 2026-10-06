@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pini & Cancian — Estudio Jurídico en Goya, Corrientes</title>
   <meta name="description" content="Estudio Jurídico Pini & Cancian en Goya, Corrientes. Derecho Laboral, Derecho de Familia, Sucesiones y Derecho Civil, con asesoramiento claro y cercano.">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png?v=20260927d">
-  <link rel="icon" type="image/png" sizes="512x512" href="assets/img/favicon-512.png?v=20260927d">
-  <link rel="apple-touch-icon" href="assets/img/favicon-180.png?v=20260927d">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png?v=20261006a">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/img/favicon-512.png?v=20261006a">
+  <link rel="apple-touch-icon" href="assets/img/favicon-180.png?v=20261006a">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap">
 
   <link rel="preload" as="image" href="assets/img/hero.jpg" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=20260927d">
+  <link rel="stylesheet" href="styles.css?v=20261006a">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip_link">Saltar al contenido</a>
@@ -25,6 +25,7 @@
   </div>
 
   <a class="wa-float" data-wa-link href="#" aria-label="Escribir por WhatsApp" data-i18n-aria="wa_float_aria">
+    <span class="wa-float-label" data-i18n="wa_float_label">Agendá tu consulta</span>
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.6.6-1.7 1.1-2.6.8-1.7-.5-3.6-1.7-5.1-3.2S7.2 9 6.7 7.3c-.3-.9.2-2 .8-2.6l.6-.6c.4-.4 1.1-.4 1.5.1L11.2 6c.3.4.3 1-.1 1.4l-.5.5c.5 1 1.3 1.9 2.2 2.6l.5-.5c.4-.4 1-.4 1.4-.1l1.8 1.4c.5.4.5 1.1.1 1.5l-.6.6zM12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.4A10 10 0 1 0 12 2z"/></svg>
   </a>
 
@@ -41,6 +42,7 @@
         <a class="nav-link" href="#consulta" data-i18n="nav_consulta">Consulta</a>
         <a class="nav-link" href="#areas" data-i18n="nav_areas">Áreas</a>
         <a class="nav-link" href="#nosotros" data-i18n="nav_nosotros">Sobre nosotros</a>
+        <a class="nav-link" href="#novedades" data-i18n="nav_novedades">Novedades</a>
         <a class="nav-link" href="#contacto" data-i18n="nav_contacto">Contacto</a>
       </nav>
       <div class="nav-actions">
@@ -69,6 +71,7 @@
         <li><a href="#consulta" data-i18n="nav_consulta">Consulta</a></li>
         <li><a href="#areas" data-i18n="nav_areas">Áreas</a></li>
         <li><a href="#nosotros" data-i18n="nav_nosotros">Sobre nosotros</a></li>
+        <li><a href="#novedades" data-i18n="nav_novedades">Novedades</a></li>
         <li><a href="#contacto" data-i18n="nav_contacto">Contacto</a></li>
       </ul>
       <div class="nav-mobile-areas">
@@ -114,6 +117,10 @@
         </div>
 
         <div class="wizard" data-wizard>
+          <div class="wizard-progress" aria-live="polite">
+            <div class="wizard-progress-bars" aria-hidden="true"><span class="is-active" data-wizard-bar="1"></span><span data-wizard-bar="2"></span></div>
+            <span class="wizard-progress-label" data-wizard-progress-label>Paso 1 de 2</span>
+          </div>
           <div class="wizard-step" data-wizard-step="1">
             <p class="wizard-intro-title" data-i18n="wizard_step1_title">¿En qué te podemos ayudar hoy?</p>
             <p class="wizard-intro-sub" data-i18n="wizard_step1_sub">Elegí el área que más se parece a tu situación.</p>
@@ -212,6 +219,18 @@
       </div>
     </section>
 
+    <section class="section trust" id="confianza">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="kicker" data-i18n="confianza_kicker">Confianza</span>
+          <h2 data-i18n="confianza_title">Cercanía y respaldo en la región.</h2>
+          <p data-i18n="confianza_sub">Un estudio de Goya que combina trato cercano con rigor profesional.</p>
+        </div>
+        <div class="trust-grid" data-trust data-reveal></div>
+        <div class="testimonial-grid" data-testimonials data-reveal></div>
+      </div>
+    </section>
+
     <section class="process section" id="proceso">
       <div class="container">
         <div class="section-head" data-reveal>
@@ -219,6 +238,17 @@
           <h2 data-i18n="proceso_title">Un proceso sin sorpresas.</h2>
         </div>
         <div class="process-grid" data-process></div>
+      </div>
+    </section>
+
+    <section class="section insights" id="novedades">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="kicker" data-i18n="novedades_kicker">Novedades jurídicas</span>
+          <h2 data-i18n="novedades_title">Lo que conviene saber.</h2>
+          <p data-i18n="novedades_sub">Notas breves sobre temas legales frecuentes para PyMEs y familias.</p>
+        </div>
+        <div class="insights-grid" data-insights></div>
       </div>
     </section>
 
@@ -280,8 +310,8 @@
 
   <script defer src="lib/gsap.min.js"></script>
   <script defer src="lib/ScrollTrigger.min.js"></script>
-  <script defer src="lib/manifest.js?v=20260927d"></script>
-  <script defer src="lib/i18n.js?v=20260927d"></script>
-  <script defer src="main.js?v=20260927d"></script>
+  <script defer src="lib/manifest.js?v=20261006a"></script>
+  <script defer src="lib/i18n.js?v=20261006a"></script>
+  <script defer src="main.js?v=20261006a"></script>
 </body>
 </html>

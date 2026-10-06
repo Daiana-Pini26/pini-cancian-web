@@ -139,6 +139,75 @@
     }).join("");
   }
 
+  var DATE_LOCALES = { es: "es-AR", en: "en-US", pt: "pt-BR", zh: "zh-CN" };
+  function formatInsightDate(iso) {
+    var d = new Date(iso + "T12:00:00");
+    if (isNaN(d.getTime())) return "";
+    try {
+      return new Intl.DateTimeFormat(DATE_LOCALES[currentLang] || "es-AR", { day: "numeric", month: "long", year: "numeric" }).format(d);
+    } catch (e) { return iso; }
+  }
+
+  function mountInsights(force) {
+    var target = $("[data-insights]");
+    if (!target || (!force && target.children.length > 0) || !data.insights) return;
+    var revealClass = force ? " is-revealed" : "";
+    target.innerHTML = data.insights.map(function (item) {
+      var title = tr(item, "title");
+      var msg = t("insight_wa_template").replace("{title}", title);
+      var bodyId = "insight-body-" + item.id;
+      return '<article class="insight-card' + revealClass + '" data-reveal>' +
+        '<div class="insight-meta">' +
+          '<span class="insight-cat">' + escHTML(tr(item, "category")) + '</span>' +
+          '<time datetime="' + escHTML(item.date) + '">' + escHTML(formatInsightDate(item.date)) + '</time>' +
+        '</div>' +
+        '<h3>' + escHTML(title) + '</h3>' +
+        '<p class="insight-excerpt">' + escHTML(tr(item, "excerpt")) + '</p>' +
+        '<div class="insight-body" id="' + bodyId + '"><div><p>' + escHTML(tr(item, "body")) + '</p></div></div>' +
+        '<div class="insight-actions">' +
+          '<button type="button" class="insight-toggle" data-insight-toggle aria-expanded="false" aria-controls="' + bodyId + '">' + escHTML(t("insight_read_more")) + '</button>' +
+          '<a class="insight-consult" href="' + escHTML(waLink(msg)) + '" target="_blank" rel="noopener">' + escHTML(t("insight_consult")) + '</a>' +
+        '</div>' +
+        '</article>';
+    }).join("");
+  }
+
+  function initInsights() {
+    var root = $("[data-insights]");
+    if (!root) return;
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-insight-toggle]");
+      if (!btn) return;
+      var card = btn.closest(".insight-card");
+      var open = !card.classList.contains("is-open");
+      card.classList.toggle("is-open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.textContent = t(open ? "insight_read_less" : "insight_read_more");
+    });
+  }
+
+  function mountTrust(force) {
+    var grid = $("[data-trust]");
+    if (grid && (force || grid.children.length === 0) && data.trust) {
+      grid.innerHTML = data.trust.map(function (item) {
+        return '<div class="trust-item">' +
+          '<h3>' + escHTML(tr(item, "title")) + '</h3>' +
+          '<p>' + escHTML(tr(item, "text")) + '</p>' +
+          '</div>';
+      }).join("");
+    }
+    var quotes = $("[data-testimonials]");
+    if (quotes && (force || quotes.children.length === 0) && data.testimonials) {
+      quotes.innerHTML = data.testimonials.map(function (q) {
+        return '<figure class="testimonial">' +
+          '<blockquote>' + escHTML(tr(q, "quote")) + '</blockquote>' +
+          '<figcaption><strong>' + escHTML(q.name) + '</strong>' +
+          (tr(q, "role") ? '<span>' + escHTML(tr(q, "role")) + '</span>' : '') +
+          '</figcaption></figure>';
+      }).join("");
+    }
+  }
+
   function mountMap() {
     var frame = $("[data-map]");
     if (!frame || frame.querySelector("iframe")) return;
@@ -427,7 +496,18 @@
     else sendBtn.setAttribute("tabindex", "-1");
   }
 
+  var wizardStepNow = 1;
+  function updateWizardProgress() {
+    var label = $("[data-wizard-progress-label]");
+    if (label) label.textContent = t("wizard_progress").replace("{n}", wizardStepNow);
+    $$("[data-wizard-bar]").forEach(function (bar) {
+      bar.classList.toggle("is-active", Number(bar.getAttribute("data-wizard-bar")) <= wizardStepNow);
+    });
+  }
+
   function showWizardStep(n) {
+    wizardStepNow = n;
+    updateWizardProgress();
     $$("[data-wizard-step]").forEach(function (el) {
       el.hidden = (el.getAttribute("data-wizard-step") !== String(n));
     });
@@ -459,6 +539,15 @@
       if (optBtn) {
         wizardState.selections[optBtn.getAttribute("data-group")] = optBtn.getAttribute("data-option");
         renderWizardStep2();
+        var curArea = getWizardArea(wizardState.areaId);
+        var done = curArea && curArea.groups.every(function (g) { return wizardState.selections[g.id] != null; });
+        var sendEl = $("[data-wizard-send]");
+        if (done && sendEl) {
+          sendEl.scrollIntoView({
+            behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+            block: "center"
+          });
+        }
         return;
       }
       if (e.target.closest("[data-wizard-back]")) {
@@ -517,6 +606,9 @@
     safe(function () { mountAreas(true); }, "mountAreas:lang");
     safe(function () { mountTeam(true); }, "mountTeam:lang");
     safe(function () { mountProcess(true); }, "mountProcess:lang");
+    safe(function () { mountInsights(true); }, "mountInsights:lang");
+    safe(function () { mountTrust(true); }, "mountTrust:lang");
+    safe(updateWizardProgress, "updateWizardProgress:lang");
     safe(function () { mountContact(true); }, "mountContact:lang");
     safe(function () { mountOfficeGallery(true); }, "mountOfficeGallery:lang");
     safe(function () { mountCollageGrid(true); }, "mountCollageGrid:lang");
@@ -566,6 +658,9 @@
     safe(renderNavAreas, "renderNavAreas");
     safe(mountTeam, "mountTeam");
     safe(mountProcess, "mountProcess");
+    safe(mountInsights, "mountInsights");
+    safe(mountTrust, "mountTrust");
+    safe(updateWizardProgress, "updateWizardProgress");
     safe(mountContact, "mountContact");
     safe(mountMap, "mountMap");
     safe(mountOfficeGallery, "mountOfficeGallery");
@@ -577,6 +672,7 @@
     safe(initSplash, "initSplash");
     safe(initNav, "initNav");
     safe(initNavAreasAccordion, "initNavAreasAccordion");
+    safe(initInsights, "initInsights");
     safe(initSmoothAnchors, "initSmoothAnchors");
     safe(initReveals, "initReveals");
     safe(initMeshFollow, "initMeshFollow");
